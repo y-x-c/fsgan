@@ -332,6 +332,8 @@ class MultiScaleResUNet(nn.Module):
             self.add_module('enhancer%d' % n, enhancer)
 
     def forward(self, pyd):
+        pyd[1] = torch.nn.functional.interpolate(pyd[0], scale_factor=0.5, mode='area')
+
         pyd = create_pyramid(pyd, self.n_local_enhancers)
 
         # Call global at the coarsest level
